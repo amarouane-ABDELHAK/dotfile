@@ -108,34 +108,65 @@ POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND='yellow'
 POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 
 
-POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(custom_javascript dir vcs)
+POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(custom_javascript dir vcs anaconda)
 POWERLEVEL9K_CUSTOM_JAVASCRIPT="echo $USER"
 POWERLEVEL9K_CUSTOM_JAVASCRIPT_FOREGROUND="yellow"
 POWERLEVEL9K_CUSTOM_JAVASCRIPT_BACKGROUND="black"
-export NVM_DIR="$HOME/.nvm"
-# [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-# [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-#alias loadnvm='[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"'
+load_nvm(){
+    
+if [ -z "$NVM_DIR" ]
+    then
+        export NVM_DIR="$HOME/.nvm"
+        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+        [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+fi
+
+}
+
+
+node() {
+    unset -f node
+    load_nvm
+    
+    node "$@"
+
+}
+npm() {
+    unset -f npm
+    load_nvm
+    
+    npm "$@"
+}
+
+nvm() {
+    unset -f nvm
+    load_nvm
+    
+    nvm "$@"
+}
+
+
 alias loadrbenv='export PATH="$HOME/.rbenv/bin:$PATH" && eval "$(rbenv init -)"'
 export PATH=/usr/local/go/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
 alias open=xdg-open
 export PATH="$HOME/.rbenv/bin:$PATH"
 eval "$(rbenv init -)"
 # added by Miniconda3 4.5.12 installer
+. /home/amarouane/miniconda3/etc/profile.d/conda.sh
 # >>> conda init >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$(CONDA_REPORT_ERRORS=false '/home/amarouane/miniconda3/bin/conda' shell.bash hook 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    \eval "$__conda_setup"
-else
-    if [ -f "/home/amarouane/miniconda3/etc/profile.d/conda.sh" ]; then
-        . "/home/amarouane/miniconda3/etc/profile.d/conda.sh"
-        CONDA_CHANGEPS1=false conda activate base
-    else
+#__conda_setup="$(CONDA_REPORT_ERRORS=false '/home/amarouane/miniconda3/bin/conda' shell.bash hook 2> /dev/null)"
+#if [ $? -eq 0 ]; then
+#    \eval "$__conda_setup"
+#else
+#    if [ -f "/home/amarouane/miniconda3/etc/profile.d/conda.sh" ]; then
+#        . "/home/amarouane/miniconda3/etc/profile.d/conda.sh"
+        #CONDA_CHANGEPS1=false conda activate base
+#    else
         \export PATH="/home/amarouane/miniconda3/bin:$PATH"
-    fi
-fi
-unset __conda_setup
+#    fi
+#fi
+#unset __conda_setup
 # <<< conda init <<<
 
 ######### Custom git command ###############
