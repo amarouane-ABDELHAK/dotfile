@@ -1,16 +1,29 @@
-
 if [ -z "$ZSH" ]
 then
-    export ZSH="/Users/amarouane/.oh-my-zsh"
+    export ZSH="$HOME/.oh-my-zsh"
     ZSH_THEME="powerlevel9k/powerlevel9k"
+    source $HOME/antigen.zsh
+    source $HOME/miniconda3/etc/profile.d/conda.sh
+    export PATH=$PATH:$HOME/miniconda3/bin:$HOME/go/bin:/home/linuxbrew/.linuxbrew/bin
+
+# Load the oh-my-zsh's library.
+antigen use oh-my-zsh
+
+# Bundles from the default repo (robbyrussell's oh-my-zsh).
+antigen bundle git
+antigen bundle heroku
+antigen bundle pip
+antigen bundle lein
+antigen bundle command-not-found
+
+# Syntax highlighting bundle.
+antigen bundle zsh-users/zsh-syntax-highlighting
+antigen bundle zsh-users/zsh-autosuggestions
 
 
-    plugins=(
-        git
-        osx
-        zsh-syntax-highlighting
-        zsh-autosuggestions
-    )
+# Tell Antigen that you're done.
+antigen apply
+
 
     source $ZSH/oh-my-zsh.sh
     POWERLEVEL9K_VCS_GIT_ICON=''
@@ -55,6 +68,8 @@ then
     array=( 
         /usr/local/opt/ruby/bin
         /usr/local/lib/ruby/gems/2.6.0/bin
+        $HOME/.cargo/bin
+        /usr/local/go/bin
         )
     for i in "${array[@]}"
         do
@@ -80,10 +95,8 @@ function gitignorechange() {
 }
 
 function gittrash() {
-    currentBranch=$(git name-rev --name-only HEAD) 
-    git checkout -b trash-$(date +%F%H%M%S)
-    gitcommit "To delete"
-    git checkout $currentBranch
+    git stash
+    git stash clear
 }
 
 function gitcommit() {
@@ -136,14 +149,14 @@ if [ -z "$CONDA_DEFAULT_ENV" ]
     
         # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('/Users/amarouane/miniconda3/bin/conda' 'shell.bash' 'hook' 2> /dev/null)"
+__conda_setup="$('$HOME/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
 if [ $? -eq 0 ]; then
     eval "$__conda_setup"
 else
-    if [ -f "/Users/amarouane/miniconda3/etc/profile.d/conda.sh" ]; then
-        . "/Users/amarouane/miniconda3/etc/profile.d/conda.sh"
+    if [ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]; then
+# . "$HOME/miniconda3/etc/profile.d/conda.sh"  # commented out by conda initialize  # commented out by conda initialize
     else
-        export PATH="/Users/amarouane/miniconda3/bin:$PATH"
+# export PATH="$HOME/miniconda3/bin:$PATH"  # commented out by conda initialize  # commented out by conda initialize
     fi
 fi
 unset __conda_setup
@@ -156,3 +169,10 @@ alias cdgithub="cd $HOME/workstation/github"
 function loginECR {
     aws ecr get-login --no-include-email --profile $AWS_PROFILE --region $AWS_REGION
 }
+
+alias open=xdg-open
+alias tf=terraform
+alias notebook="jupyter-notebook . 2>&1 >/dev/null &!"
+alias k=kubectl
+
+eval $(thefuck --alias)
