@@ -1,178 +1,219 @@
+
 if [ -z "$ZSH" ]
 then
+    # If you come from bash you might have to change your $PATH.
+    # export PATH=$HOME/bin:/usr/local/bin:$PATH
+
+    # Path to your oh-my-zsh installation.
     export ZSH="$HOME/.oh-my-zsh"
+
+    # Set name of the theme to load --- if set to "random", it will
+    # load a random theme each time oh-my-zsh is loaded, in which case,
+    # to know which specific one was loaded, run: echo $RANDOM_THEME
+    # See https://github.com/ohmyzsh/ohmyzsh/wiki/Themes
+    #ZSH_THEME="robbyrussell"
     ZSH_THEME="powerlevel9k/powerlevel9k"
-    source $HOME/antigen.zsh
-    source $HOME/miniconda3/etc/profile.d/conda.sh
-    export PATH=$PATH:$HOME/miniconda3/bin:$HOME/go/bin:/home/linuxbrew/.linuxbrew/bin
-
-# Load the oh-my-zsh's library.
-antigen use oh-my-zsh
-
-# Bundles from the default repo (robbyrussell's oh-my-zsh).
-antigen bundle git
-antigen bundle heroku
-antigen bundle pip
-antigen bundle lein
-antigen bundle command-not-found
-
-# Syntax highlighting bundle.
-antigen bundle zsh-users/zsh-syntax-highlighting
-antigen bundle zsh-users/zsh-autosuggestions
+    POWERLEVEL9K_MODE='nerdfont-complete'
+    POWERLEVEL9K_COLOR_SCHEME='dark'
 
 
-# Tell Antigen that you're done.
-antigen apply
+
+    # Prompts
+    if [ -n "$SSH_CLIENT" ] || [ -n "$SSH_TTY" ]; then
+      POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(context dir virtualenv vcs)
+    else
+      POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(root_indicator custom_javascript dir virtualenv vcs)
+    fi
+    #POWERLEVEL9K_RIGHT_PROMPT_ELEMENTS=(background_jobs status)
+    #POWERLEVEL9K_LEFT_SEGMENT_SEPARATOR=$'\ue0b0'
+    #POWERLEVEL9K_RIGHT_SEGMENT_SEPARATOR=$'\ue0b2'
+    POWERLEVEL9K_PROMPT_ON_NEWLINE=false
+    POWERLEVEL9K_PROMPT_ADD_NEWLINE=true
+    POWERLEVEL9K_MULTILINE_FIRST_PROMPT_PREFIX="╭"
+    POWERLEVEL9K_MULTILINE_LAST_PROMPT_PREFIX="╰\uF460\uF460\uF460 "
 
 
-    source $ZSH/oh-my-zsh.sh
-    POWERLEVEL9K_VCS_GIT_ICON=''
-    POWERLEVEL9K_VCS_STAGED_ICON='\u00b1'
-    POWERLEVEL9K_VCS_UNTRACKED_ICON='\u25CF'
-    POWERLEVEL9K_VCS_UNSTAGED_ICON='\u00b1'
-    POWERLEVEL9K_VCS_INCOMING_CHANGES_ICON='\u2193'
-    POWERLEVEL9K_VCS_OUTGOING_CHANGES_ICON='\u2191'
-    POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(anaconda custom_javascript dir vcs)
-
+    #Personal
     POWERLEVEL9K_VCS_MODIFIED_BACKGROUND='yellow'
     POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND='yellow'
     POWERLEVEL9K_PROMPT_ON_NEWLINE=true
 
 
-    
+        
     POWERLEVEL9K_CUSTOM_JAVASCRIPT="echo $USER"
     POWERLEVEL9K_CUSTOM_JAVASCRIPT_FOREGROUND="yellow"
     POWERLEVEL9K_CUSTOM_JAVASCRIPT_BACKGROUND="black"
 
-    POWERLEVEL9K_ANACONDA_FOREGROUND="red"
-    POWERLEVEL9K_ANACONDA_BACKGROUND="black"
-    prompt_anaconda() {
-  # Depending on the conda version, either might be set. This
-  # variant works even if both are set.
 
-  _path=$CONDA_ENV_PATH$CONDA_PREFIX
-
-  if [ "$CONDA_DEFAULT_ENV"  = 'base' ] ; then
-       POWERLEVEL9K_ANACONDA="echo 'kk'"
-  else
-     if ! [ -z "$_path" ]; then
-    # config - can be overwritten in users' zshrc file.
-    set_default POWERLEVEL9K_ANACONDA_LEFT_DELIMITER "("
-    set_default POWERLEVEL9K_ANACONDA_RIGHT_DELIMITER ")"
-    "$1_prompt_segment" "$0" "$2" "$3" "$4" "$POWERLEVEL9K_ANACONDA_LEFT_DELIMITER$(basename $_path)$POWERLEVEL9K_ANACONDA_RIGHT_DELIMITER" 'PYTHON_ICON'
-  fi
-  fi
-  
-}
-
-    array=( 
-        /usr/local/opt/ruby/bin
-        /usr/local/lib/ruby/gems/2.6.0/bin
-        $HOME/.cargo/bin
-        /usr/local/go/bin
-        )
-    for i in "${array[@]}"
-        do
-	        PATH=$PATH:$i
-	
-        done
-    export PATH=$PATH
-    
-fi
+    # Dir segment
+    POWERLEVEL9K_SHORTEN_DIR_LENGTH=2
+    POWERLEVEL9K_SHORTEN_DELIMITER=…
+    POWERLEVEL9K_DIR_PATH_SEPARATOR="%F{grey}\/%F{white}"
+    #POWERLEVEL9K_DIR_OMIT_FIRST_CHARACTER=true
+    #POWERLEVEL9K_DIR_DEFAULT_BACKGROUND='241'
+    #POWERLEVEL9K_DIR_DEFAULT_FOREGROUND='white'
+    #POWERLEVEL9K_DIR_HOME_BACKGROUND='241'
+    #POWERLEVEL9K_DIR_HOME_FOREGROUND='white'
+    #POWERLEVEL9K_DIR_HOME_SUBFOLDER_BACKGROUND='241'
+    #POWERLEVEL9K_DIR_HOME_SUBFOLDER_FOREGROUND='white'
 
 
 
-# My custom function 
-######### Custom git command ###############
-function gitpush() {
-    gitcommit $1
-    git push origin $(git name-rev --name-only HEAD)
-}
+    # Root segment
+    POWERLEVEL9K_ROOT_INDICATOR_BACKGROUND='red'
+    POWERLEVEL9K_ROOT_INDICATOR_FOREGROUND='black'
+    POWERLEVEL9K_ROOT_ICON="\uf21b"
 
-function gitignorechange() {
-    git stash
-    git stash clear
-}
+    # Status segment
+    POWERLEVEL9K_STATUS_VERBOSE=false
+    POWERLEVEL9K_STATUS_OK_IN_NON_VERBOSE=true
+    POWERLEVEL9K_STATUS_OK_BACKGROUND='black'
+    POWERLEVEL9K_STATUS_OK_FOREGROUND='236'
+    POWERLEVEL9K_STATUS_OK_VISUAL_IDENTIFIER_COLOR='010'
+    POWERLEVEL9K_STATUS_ERROR_BACKGROUND='black'
+    POWERLEVEL9K_STATUS_ERROR_FOREGROUND='236'
+    POWERLEVEL9K_STATUS_ERROR_VISUAL_IDENTIFIER_COLOR='red'
 
-function gittrash() {
-    git stash
-    git stash clear
-}
+    # Background jobs segment
+    POWERLEVEL9K_BACKGROUND_JOBS_ICON="\uf423"
 
-function gitcommit() {
-    git add .
-    git commit -m $1
-}
+    # Battery segment
+    POWERLEVEL9K_BATTERY_CHARGING='107'
+    POWERLEVEL9K_BATTERY_CHARGED='blue'
+    POWERLEVEL9K_BATTERY_LOW_THRESHOLD='50'
+    POWERLEVEL9K_BATTERY_LOW_COLOR='red'
 
-load_nvm(){
-    
-if [ -z "$NVM_DIR" ]
-    then
-    
-        export NVM_DIR="$HOME/.nvm"
-        [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
-        [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
-fi
+    # VCS segment
+    POWERLEVEL9K_VCS_CLEAN_BACKGROUND='239'
+    POWERLEVEL9K_VCS_CLEAN_FOREGROUND='010'
+    POWERLEVEL9K_VCS_MODIFIED_BACKGROUND='239'
+    POWERLEVEL9K_VCS_MODIFIED_FOREGROUND='yellow'
+    POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND='239'
+    POWERLEVEL9K_VCS_UNTRACKED_FOREGROUND='red'
 
-}
+    # SSH segment
+    POWERLEVEL9K_SSH_BACKGROUND='blue'
+    POWERLEVEL9K_SSH_FOREGROUND='white'
 
-function gitmergerequestTo() {
-    currentBranch=$(git name-rev --name-only HEAD) 
-    git push -u origin $currentBranch -o merge_request.create -o merge_request.target=$1
-}
-
-
-node() {
-    unset -f node
-    load_nvm
-    
-    node "$@"
-
-}
-npm() {
-    unset -f npm
-    load_nvm
-    
-    npm "$@"
-}
-
-nvm() {
-    unset -f nvm
-    load_nvm
-    
-    nvm "$@"
-}
+    # Context segment
+    POWERLEVEL9K_CONTEXT_TEMPLATE="\uf109 %m"
+    POWERLEVEL9K_CONTEXT_DEFAULT_FOREGROUND='white'
+    POWERLEVEL9K_CONTEXT_DEFAULT_BACKGROUND='blue'
+    POWERLEVEL9K_CONTEXT_ROOT_FOREGROUND='white'
+    POWERLEVEL9K_CONTEXT_ROOT_BACKGROUND='red'
 
 
-if [ -z "$CONDA_DEFAULT_ENV" ]
-    then
-    
-        # >>> conda initialize >>>
-# !! Contents within this block are managed by 'conda init' !!
-__conda_setup="$('$HOME/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
-if [ $? -eq 0 ]; then
-    eval "$__conda_setup"
-else
-    if [ -f "$HOME/miniconda3/etc/profile.d/conda.sh" ]; then
-# . "$HOME/miniconda3/etc/profile.d/conda.sh"  # commented out by conda initialize  # commented out by conda initialize
+    # Set list of themes to pick from when loading at random
+    # Setting this variable when ZSH_THEME=random will cause zsh to load
+    # a theme from this variable instead of looking in $ZSH/themes/
+    # If set to an empty array, this variable will have no effect.
+    # ZSH_THEME_RANDOM_CANDIDATES=( "robbyrussell" "agnoster" )
+
+    # Uncomment the following line to use case-sensitive completion.
+    # CASE_SENSITIVE="true"
+
+    # Uncomment the following line to use hyphen-insensitive completion.
+    # Case-sensitive completion must be off. _ and - will be interchangeable.
+    # HYPHEN_INSENSITIVE="true"
+
+    # Uncomment one of the following lines to change the auto-update behavior
+    # zstyle ':omz:update' mode disabled  # disable automatic updates
+    # zstyle ':omz:update' mode auto      # update automatically without asking
+    # zstyle ':omz:update' mode reminder  # just remind me to update when it's time
+
+    # Uncomment the following line to change how often to auto-update (in days).
+    # zstyle ':omz:update' frequency 13
+
+    # Uncomment the following line if pasting URLs and other text is messed up.
+    # DISABLE_MAGIC_FUNCTIONS="true"
+
+    # Uncomment the following line to disable colors in ls.
+    # DISABLE_LS_COLORS="true"
+
+    # Uncomment the following line to disable auto-setting terminal title.
+    # DISABLE_AUTO_TITLE="true"
+
+    # Uncomment the following line to enable command auto-correction.
+    # ENABLE_CORRECTION="true"
+
+    # Uncomment the following line to display red dots whilst waiting for completion.
+    # You can also set it to another string to have that shown instead of the default red dots.
+    # e.g. COMPLETION_WAITING_DOTS="%F{yellow}waiting...%f"
+    # Caution: this setting can cause issues with multiline prompts in zsh < 5.7.1 (see #5765)
+    # COMPLETION_WAITING_DOTS="true"
+
+    # Uncomment the following line if you want to disable marking untracked files
+    # under VCS as dirty. This makes repository status check for large repositories
+    # much, much faster.
+    # DISABLE_UNTRACKED_FILES_DIRTY="true"
+
+    # Uncomment the following line if you want to change the command execution time
+    # stamp shown in the history command output.
+    # You can set one of the optional three formats:
+    # "mm/dd/yyyy"|"dd.mm.yyyy"|"yyyy-mm-dd"
+    # or set a custom format using the strftime function format specifications,
+    # see 'man strftime' for details.
+    # HIST_STAMPS="mm/dd/yyyy"
+
+    # Would you like to use another custom folder than $ZSH/custom?
+    # ZSH_CUSTOM=/path/to/new-custom-folder
+
+    # Which plugins would you like to load?
+    # Standard plugins can be found in $ZSH/plugins/
+    # Custom plugins may be added to $ZSH_CUSTOM/plugins/
+    # Example format: plugins=(rails git textmate ruby lighthouse)
+    # Add wisely, as too many plugins slow down shell startup.
+    plugins=(
+      git
+      zsh-autosuggestions
+    )
+
+    source $ZSH/oh-my-zsh.sh
+
+    # User configuration
+
+    # export MANPATH="/usr/local/man:$MANPATH"
+
+    # You may need to manually set your language environment
+    # export LANG=en_US.UTF-8
+
+    # Preferred editor for local and remote sessions
+    # if [[ -n $SSH_CONNECTION ]]; then
+    #   export EDITOR='vim'
+    # else
+    #   export EDITOR='mvim'
+    # fi
+
+    # Compilation flags
+    # export ARCHFLAGS="-arch x86_64"
+
+    # Set personal aliases, overriding those provided by oh-my-zsh libs,
+    # plugins, and themes. Aliases can be placed here, though oh-my-zsh
+    # users are encouraged to define aliases within the ZSH_CUSTOM folder.
+    # For a full list of active aliases, run `alias`.
+    #
+    # Example aliases
+    # alias zshconfig="mate ~/.zshrc"
+    # alias ohmyzsh="mate ~/.oh-my-zsh"
+    source /home/amarouane/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+    # >>> conda initialize >>>
+    # !! Contents within this block are managed by 'conda init' !!
+    __conda_setup="$('/home/amarouane/miniconda3/bin/conda' 'shell.zsh' 'hook' 2> /dev/null)"
+    if [ $? -eq 0 ]; then
+        eval "$__conda_setup"
     else
-# export PATH="$HOME/miniconda3/bin:$PATH"  # commented out by conda initialize  # commented out by conda initialize
+        if [ -f "/home/amarouane/miniconda3/etc/profile.d/conda.sh" ]; then
+            . "/home/amarouane/miniconda3/etc/profile.d/conda.sh"
+        else
+            export PATH="/home/amarouane/miniconda3/bin:$PATH"
+        fi
     fi
-fi
-unset __conda_setup
-# <<< conda initialize <<<
+    unset __conda_setup
+    # <<< conda initialize <<<
 fi
 
-alias tf=terraform
-alias cdgitlab="cd $HOME/workstation/gitlab"
-alias cdgithub="cd $HOME/workstation/github"
-function loginECR {
-    aws ecr get-login --no-include-email --profile $AWS_PROFILE --region $AWS_REGION
+function make_silent() {
+  cd ~/dell-bios-fan-control
+  sudo ./dell-bios-fan-control 1
 }
-
-alias open=xdg-open
-alias tf=terraform
-alias notebook="jupyter-notebook . 2>&1 >/dev/null &!"
-alias k=kubectl
-
-eval $(thefuck --alias)
